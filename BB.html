@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Breaker</title>
+    
+    <style>
+        /* Estilos CSS - Estilo Mafia Rosado y Negro */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0d0d0d;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff69b4;
+            text-transform: uppercase;
+            font-size: 2.5em;
+            letter-spacing: 3px;
+            border-bottom: 2px solid #ff69b4;
+            padding-bottom: 10px;
+        }
+
+        /* Estilos para el Login */
+        #login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            text-align: center;
+        }
+        
+        .login-input {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ff69b4;
+            background-color: #0d0d0d;
+            color: #f5f5f5;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 4px;
+        }
+
+        .login-button {
+            padding: 10px 20px;
+            background-color: #ff69b4;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .login-button:hover {
+            background-color: #f53199;
+        }
+
+        #login-message {
+            color: #ff69b4;
+            margin-top: 10px;
+        }
+        
+        /* Estilos de la aplicación principal (Inventario y Temporizadores) */
+        #app-content {
+            display: none; /* Oculto por defecto, se muestra al iniciar sesión */
+        }
+        
+        .section {
+            padding: 20px;
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            background-color: #262626;
+        }
+
+        .tracker-section h2, .timer-section h2, .input-section h2 {
+            margin-top: 0;
+            color: #ff69b4;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ff69b4;
+            padding-bottom: 5px;
+        }
+
+        .input-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .input-item label {
+            flex: 1;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .input-item input {
+            flex: 2;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ff69b4;
+            background-color: #0d0d0d;
+            color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .input-item button, .timer-button {
+            padding: 8px 15px;
+            background-color: #ff69b4;
+            color: #0d0d0d;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .input-item button:hover, .timer-button:hover {
+            background-color: #f53199;
+        }
+
+        .timer-display {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            color: #ff69b4;
+            text-shadow: 0 0 5px #ff69b4;
+        }
+        
+        .timer-group {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .timer-box {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ff69b4;
+            border-radius: 5px;
+            flex-grow: 1;
+            min-width: 180px;
+        }
+
+        .timer-box h3 {
+            color: #ff69b4;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Border Breaker</h1>
+
+        <div id="login-screen">
+            <h2>Inicio de Sesión</h2>
+            <input type="text" id="username" class="login-input" placeholder="Nombre de Usuario">
+            <input type="password" id="password" class="login-input" placeholder="Contraseña">
+            <button class="login-button" onclick="login()">Acceder</button>
+            <p id="login-message"></p>
+        </div>
+
+        <div id="app-content">
+            <div class="section tracker-section">
+                <h2>Inventario</h2>
+                <p><strong>Dinero:</strong> $<span id="moneyAmount">0.00</span></p>
+                <p><strong>Ropa:</strong> <span id="clothesAmount">0</span> prendas</p>
+                <p><strong>Recortes de pelo:</strong> <span id="haircutsAmount">0</span></p>
+            </div>
+
+            <div class="section input-section">
+                <h2>Añadir</h2>
+                <div class="input-item">
+                    <label for="moneyInput">Dinero ($):</label>
+                    <input type="number" id="moneyInput" placeholder="Ingresar cantidad">
+                    <button onclick="addValue('money')">Añadir Dinero</button>
+                </div>
+
+                <div class="input-item">
+                    <label for="clothesInput">Ropa (prendas):</label>
+                    <input type="number" id="clothesInput" placeholder="Ingresar cantidad">
+                    <button onclick="addValue('clothes')">Añadir Ropa</button>
+                </div>
+
+                <div class="input-item">
+                    <label for="haircutsInput">Recortes:</label>
+                    <input type="number" id="haircutsInput" placeholder="Ingresar cantidad">
+                    <button onclick="addValue('haircuts')">Añadir Recortes</button>
+                </div>
+            </div>
+
+            <div class="section timer-section">
+                <h2>Operaciones</h2>
+                <div class="timer-group">
+                    <div class="timer-box">
+                        <h3>Robo Pequeño</h3>
+                        <p>10 minutos</p>
+                        <div id="timer-small" class="timer-display">10:00</div>
+                        <button class="timer-button" onclick="startTimer('small', 10 * 60)">Iniciar</button>
+                    </div>
+                    
+                    <div class="timer-box">
+                        <h3>Robo Mediano</h3>
+                        <p>15 minutos</p>
+                        <div id="timer-medium" class="timer-display">15:00</div>
+                        <button class="timer-button" onclick="startTimer('medium', 15 * 60)">Iniciar</button>
+                    </div>
+
+                    <div class="timer-box">
+                        <h3>Robo Grande</h3>
+                        <p>25 minutos</p>
+                        <div id="timer-large" class="timer-display">25:00</div>
+                        <button class="timer-button" onclick="startTimer('large', 25 * 60)">Iniciar</button>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="login-button" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importa las funciones necesarias de los SDK de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-BWB4Xtv7BW0-EKvG48RROzgEn9kvSig",
+            authDomain: "borderbreakersbb.firebaseapp.com",
+            projectId: "borderbreakersbb",
+            storageBucket: "borderbreakersbb.firebasestorage.app",
+            messagingSenderId: "857482895344",
+            appId: "1:857482895344:web:11972cb00906b0b3bbc735",
+            measurementId: "G-R5KH057XTL"
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); 
+        const db = getFirestore(app);
+
+        // --- Lógica del Login y Autenticación ---
+        
+        // Usuarios y contraseñas válidos (incluyendo el administrador)
+        const USERS = {
+            "user": "password123",
+            "Mikasuki": "202412" // Usuario Administrador
+        };
+
+        let currentUser = null; // Variable para almacenar el usuario logeado
+        let inventoryRef = null; // Variable para almacenar la referencia a Firestore
+
+        function login() {
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            const messageDisplay = document.getElementById('login-message');
+
+            if (USERS[usernameInput] && USERS[usernameInput] === passwordInput) {
+                // Autenticación exitosa
+                currentUser = usernameInput;
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', currentUser);
+                showAppContent();
+            } else {
+                messageDisplay.textContent = "Nombre de usuario o contraseña incorrectos.";
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            inventoryRef = null;
+            location.reload(); 
+        }
+
+        function showAppContent() {
+            // Configurar la referencia a Firestore basada en el usuario logeado
+            // Cada usuario (incluido Mikasuki) tendrá su propio documento de inventario
+            currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                 // Usamos el nombre de usuario como ID del documento en la colección 'inventory'
+                inventoryRef = doc(db, "inventory", currentUser); 
+            }
+
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-content').style.display = 'flex';
+            document.getElementById('app-content').style.flexDirection = 'column';
+            
+            // Cargamos los datos del inventario para el usuario actual
+            loadInventoryFromFirebase();
+        }
+
+        function showLoginScreen() {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-content').style.display = 'none';
+        }
+
+        // --- Lógica del Inventario con Firebase Firestore ---
+
+        let money = 0;
+        let clothes = 0;
+        let haircuts = 0;
+
+        // Función para cargar los datos desde Firestore
+        async function loadInventoryFromFirebase() {
+            if (!inventoryRef) return; // Asegurar que hay una referencia válida
+
+            try {
+                const docSnap = await getDoc(inventoryRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    money = data.money || 0;
+                    clothes = data.clothes || 0;
+                    haircuts = data.haircuts || 0;
+                } else {
+                    // Crear un documento inicial si no existe
+                    await setDoc(inventoryRef, { money: 0, clothes: 0, haircuts: 0 });
+                }
+                updateDisplay();
+            } catch (error) {
+                console.error("Error al cargar el inventario: ", error);
+            }
+        }
+
+        // Función para guardar los datos en Firestore
+        async function saveInventoryToFirebase() {
+            if (!inventoryRef) return; 
+
+            try {
+                await updateDoc(inventoryRef, {
+                    money: money,
+                    clothes: clothes,
+                    haircuts: haircuts
+                });
+            } catch (error) {
+                console.error("Error al guardar el inventario: ", error);
+            }
+        }
+
+        // Función para actualizar la visualización en la página 
+        function updateDisplay() {
+            document.getElementById('moneyAmount').textContent = money.toFixed(2);
+            document.getElementById('clothesAmount').textContent = clothes;
+            document.getElementById('haircutsAmount').textContent = haircuts;
+        }
+
+        // Modificamos addValue para usar las variables y luego guardar en Firebase
+        async function addValue(type) {
+            let inputId = '';
+            let value = 0;
+
+            if (type === 'money') {
+                inputId = 'moneyInput';
+                value = parseFloat(document.getElementById(inputId).value);
+                if (!isNaN(value)) {
+                    money += value;
+                }
+            } else if (type === 'clothes') {
+                inputId = 'clothesInput';
+                value = parseInt(document.getElementById(inputId).value);
+                if (!isNaN(value)) {
+                    clothes += value;
+                }
+            } else if (type === 'haircuts') {
+                inputId = 'haircutsInput';
+                value = parseInt(document.getElementById(inputId).value);
+                if (!isNaN(value)) {
+                    haircuts += value;
+                }
+            }
+
+            document.getElementById(inputId).value = '';
+            updateDisplay();
+            // Guardar los cambios en Firebase después de la actualización
+            await saveInventoryToFirebase();
+        }
+
+        // --- Lógica de Temporizador (sin cambios) ---
+        const timers = {};
+
+        function startTimer(timerId, durationInSeconds) {
+            if (timers[timerId]) {
+                clearInterval(timers[timerId]);
+            }
+
+            let timeLeft = durationInSeconds;
+            const display = document.getElementById(`timer-${timerId}`);
+
+            timers[timerId] = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                display.textContent = formattedTime;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timers[timerId]);
+                    display.textContent = "¡Operación completada!";
+                    alert(`¡La operación de ${timerId} ha terminado!`);
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Verificar el estado de inicio de sesión al cargar la página
+        window.onload = checkLoginStatus;
+    </script>
+</body>
+</html>
