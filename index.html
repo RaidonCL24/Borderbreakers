@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Border Breaker</title>
-    
+
     <style>
         /* Estilos CSS - Estilo Mafia Rosado y Negro */
         body {
@@ -18,7 +18,7 @@
             align-items: center;
             min-height: 100vh; /* Asegura que ocupe al menos el alto de la ventana */
         }
-        
+
         .container {
             max-width: 800px;
             width: 100%; /* Asegura que ocupe todo el ancho disponible */
@@ -42,61 +42,13 @@
             padding-bottom: 10px;
         }
 
-        /* Estilos para el Login y Registro */
-        #login-screen, #register-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            border: 1px solid #ff69b4;
-            border-radius: 5px;
-            background-color: #262626;
-            text-align: center;
-            gap: 15px;
-        }
-        
-        .login-input {
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ff69b4;
-            background-color: #0d0d0d;
-            color: #f5f5f5;
-            width: 80%;
-            max-width: 300px;
-            border-radius: 4px;
-        }
-
-        .login-button {
-            padding: 10px 20px;
-            background-color: #ff69b4;
-            color: #0d0d0d;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: background-color 0.3s ease;
-        }
-        
-        .login-button:hover {
-            background-color: #f53199;
-        }
-
-        #login-message, #register-message, #app-message {
-            color: #ff69b4;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        
-        /* Estilos de la aplicación principal (Inventario y Temporizadores) */
+        /* Contenido principal de la aplicación */
         #app-content {
             display: none; /* Oculto por defecto, se muestra al iniciar sesión */
             flex-direction: column; /* Asegura que las secciones se apilen */
             gap: 30px; /* Espacio entre secciones */
         }
-        
+
         .section {
             padding: 20px;
             border: 1px solid #ff69b4;
@@ -161,14 +113,14 @@
             color: #ff69b4;
             text-shadow: 0 0 5px #ff69b4;
         }
-        
+
         .timer-group {
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
             gap: 15px;
         }
-        
+
         .timer-box {
             text-align: center;
             padding: 10px;
@@ -252,27 +204,6 @@
     <div class="container">
         <h1>Border Breaker</h1>
 
-        <!-- Pantalla de Login -->
-        <div id="login-screen">
-            <h2>Inicio de Sesión</h2>
-            <input type="email" id="loginEmail" class="login-input" placeholder="Correo Electrónico">
-            <input type="password" id="loginPassword" class="login-input" placeholder="Contraseña">
-            <button class="login-button" onclick="handleLogin()">Acceder</button>
-            <p id="login-message"></p>
-            <p>¿No tienes cuenta? <a href="#" onclick="showRegisterScreen()" style="color: #ff69b4;">Regístrate aquí</a></p>
-        </div>
-
-        <!-- Pantalla de Registro -->
-        <div id="register-screen" style="display: none;">
-            <h2>Registro de Usuario</h2>
-            <input type="text" id="registerName" class="login-input" placeholder="Nombre de Usuario">
-            <input type="email" id="registerEmail" class="login-input" placeholder="Correo Electrónico">
-            <input type="password" id="registerPassword" class="login-input" placeholder="Contraseña">
-            <button class="login-button" onclick="handleRegister()">Registrar</button>
-            <p id="register-message"></p>
-            <p>¿Ya tienes cuenta? <a href="#" onclick="showLoginScreen()" style="color: #ff69b4;">Inicia sesión aquí</a></p>
-        </div>
-
         <!-- Contenido principal de la aplicación -->
         <div id="app-content">
             <div class="section tracker-section">
@@ -312,7 +243,7 @@
                         <div id="timer-small" class="timer-display">10:00</div>
                         <button class="timer-button" onclick="startTimer('small', 10 * 60)">Iniciar</button>
                     </div>
-                    
+
                     <div class="timer-box">
                         <h3>Robo Mediano</h3>
                         <p>15 minutos</p>
@@ -344,12 +275,13 @@
 
     <script type="module">
         // Importa las funciones necesarias de los SDK de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"; // Versión actualizada
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; // Importar Auth
-        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
         // Tu configuración de Firebase (¡IMPORTANTE: Reemplaza con tus propios valores!)
+        // Si estás ejecutando esto en un entorno Canvas que proporciona __firebase_config,
+        // deberías usar: const firebaseConfig = JSON.parse(__firebase_config);
         const firebaseConfig = {
             apiKey: "AIzaSyD-BWB4Xtv7BW0-EKvG48RROzgEn9kvSig",
             authDomain: "borderbreakersbb.firebaseapp.com",
@@ -362,149 +294,42 @@
 
         // Inicializa Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app); 
-        const auth = getAuth(app); // Inicializar Firebase Authentication
-        const db = getFirestore(app); // Inicializar Firebase Firestore
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // Referencias a elementos del DOM para mensajes
-        const loginMessageDisplay = document.getElementById('login-message');
-        const registerMessageDisplay = document.getElementById('register-message');
         const currentUserNameDisplay = document.getElementById('currentUserName');
         const modal = document.getElementById('messageModal');
         const modalMessageText = document.getElementById('modalMessageText');
+        const appContent = document.getElementById('app-content');
 
         let currentUserUid = null; // ID único del usuario autenticado por Firebase
         let inventoryRef = null; // Referencia al documento de Firestore del usuario actual
+        let unsubscribeSnapshot = null; // Para desuscribirse del listener de Firestore
 
         // --- Funciones para mostrar/ocultar pantallas ---
-        function showLoginScreen() {
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('register-screen').style.display = 'none';
-            document.getElementById('app-content').style.display = 'none';
-            loginMessageDisplay.textContent = ''; // Limpiar mensajes
-            registerMessageDisplay.textContent = '';
-        }
-
-        function showRegisterScreen() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'flex';
-            document.getElementById('app-content').style.display = 'none';
-            loginMessageDisplay.textContent = ''; // Limpiar mensajes
-            registerMessageDisplay.textContent = '';
+        window.showLoginScreen = function() { // Hacemos global para poder llamarla desde onAuthStateChanged
+            window.location.href = '/login.html'; // Redirige a la página de login
         }
 
         function showAppContent() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'none';
-            document.getElementById('app-content').style.display = 'flex';
-            document.getElementById('app-content').style.flexDirection = 'column'; // Asegurar dirección de columna
-            // Limpiar campos de login/registro
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('registerName').value = '';
-            document.getElementById('registerEmail').value = '';
-            document.getElementById('registerPassword').value = '';
+            appContent.style.display = 'flex';
+            appContent.style.flexDirection = 'column'; // Asegurar dirección de columna
         }
 
         // --- Lógica de Autenticación con Firebase ---
 
-        // Función para manejar el REGISTRO de un nuevo usuario
-        async function handleRegister() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-
-            if (!name || !email || !password) {
-                registerMessageDisplay.textContent = "Por favor, completa todos los campos.";
-                return;
-            }
-
-            try {
-                // Crea el usuario en Firebase Authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                currentUserUid = user.uid; // Guarda el UID del usuario autenticado
-                currentUserNameDisplay.textContent = name; // Muestra el nombre en la app
-
-                // Guarda la información adicional del usuario en Firestore
-                inventoryRef = doc(db, "users_data", user.uid); // Colección 'users_data' para perfiles
-                await setDoc(inventoryRef, {
-                    email: email,
-                    name: name, // Guardamos el nombre ingresado
-                    money: 0,
-                    clothes: 0,
-                    haircuts: 0
-                });
-
-                showMessageModal("¡Registro exitoso! Has iniciado sesión.");
-                showAppContent(); // Muestra el contenido de la aplicación
-                loadInventoryFromFirebase(); // Carga el inventario inicial
-            } catch (error) {
-                console.error("Error al registrar:", error.code, error.message);
-                let errorMessage = "Error al registrar. Inténtalo de nuevo.";
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = "El correo electrónico ya está en uso.";
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = "El formato del correo electrónico es inválido.";
-                } else if (error.code === 'auth/weak-password') {
-                    errorMessage = "La contraseña debe tener al menos 6 caracteres.";
-                }
-                registerMessageDisplay.textContent = errorMessage;
-            }
-        }
-
-        // Función para manejar el INICIO DE SESIÓN
-        async function handleLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                loginMessageDisplay.textContent = "Por favor, ingresa tu correo y contraseña.";
-                return;
-            }
-
-            try {
-                // Inicia sesión con Firebase Authentication
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                currentUserUid = user.uid; // Guarda el UID del usuario autenticado
-                
-                // Cargar el nombre del usuario desde Firestore
-                const userDoc = await getDoc(doc(db, "users_data", user.uid));
-                if (userDoc.exists()) {
-                    currentUserNameDisplay.textContent = userDoc.data().name || "Usuario";
-                } else {
-                    currentUserNameDisplay.textContent = "Usuario"; // Fallback si no hay nombre
-                }
-
-                showMessageModal("¡Inicio de sesión exitoso!");
-                showAppContent(); // Muestra el contenido de la aplicación
-                loadInventoryFromFirebase(); // Carga el inventario del usuario
-            } catch (error) {
-                console.error("Error al iniciar sesión:", error.code, error.message);
-                let errorMessage = "Error al iniciar sesión. Inténtalo de nuevo.";
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorMessage = "Correo o contraseña incorrectos.";
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = "El formato del correo electrónico es inválido.";
-                }
-                loginMessageDisplay.textContent = errorMessage;
-            }
-        }
-
         // Función para CERRAR SESIÓN
-        async function logout() {
+        window.logout = async function() { // Hacemos global
             try {
+                if (unsubscribeSnapshot) {
+                    unsubscribeSnapshot(); // Desuscribirse del listener de Firestore
+                }
                 await signOut(auth); // Cierra sesión en Firebase
                 showMessageModal("Sesión cerrada.");
-                showLoginScreen(); // Vuelve a la pantalla de login
-                // Limpiar datos locales
-                money = 0;
-                clothes = 0;
-                haircuts = 0;
-                updateDisplay();
+                setTimeout(() => {
+                    showLoginScreen(); // Vuelve a la pantalla de login
+                }, 1000);
             } catch (error) {
                 console.error("Error al cerrar sesión:", error.message);
                 showMessageModal("Error al cerrar sesión.");
@@ -513,25 +338,85 @@
 
         // Observador del estado de autenticación de Firebase
         // Esto se ejecuta cada vez que el estado de autenticación cambia (login, logout, recarga)
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // Usuario logeado
                 currentUserUid = user.uid;
                 inventoryRef = doc(db, "users_data", user.uid); // La colección para los datos del inventario de cada usuario
-                // Cargar el nombre del usuario
-                getDoc(inventoryRef).then(docSnap => {
-                    if (docSnap.exists()) {
-                        currentUserNameDisplay.textContent = docSnap.data().name || "Usuario";
+
+                // Cargar el documento del usuario desde Firestore para verificar su estado y email
+                const userDocSnap = await getDoc(inventoryRef);
+
+                // Si el documento del usuario no existe en Firestore (ej. si se registró con Google y no se guardó la data)
+                if (!userDocSnap.exists()) {
+                    // Crea el documento inicial para el usuario
+                    await setDoc(inventoryRef, {
+                        email: user.email,
+                        name: user.displayName || user.email,
+                        money: 0,
+                        clothes: 0,
+                        haircuts: 0,
+                        role: 'user',
+                        status: user.emailVerified ? 'approved' : 'pending' // Si el email está verificado, el estado es aprobado
+                    });
+                    // Recarga el documento recién creado
+                    const newUserDocSnap = await getDoc(inventoryRef);
+                    if (newUserDocSnap.exists() && newUserDocSnap.data().status === 'approved' && user.emailVerified) {
+                        currentUserNameDisplay.textContent = newUserDocSnap.data().name || "Usuario";
+                        showAppContent();
+                        loadInventoryFromFirebase();
+                    } else if (newUserDocSnap.exists() && !user.emailVerified) {
+                        showMessageModal("Tu correo electrónico no ha sido verificado. Por favor, revisa tu bandeja de entrada o spam. Redirigiendo al login...");
+                        setTimeout(async () => {
+                            await signOut(auth);
+                            showLoginScreen();
+                        }, 3000);
                     } else {
-                        currentUserNameDisplay.textContent = "Usuario";
+                        showMessageModal("Tu cuenta está pendiente de aprobación. Redirigiendo al login...");
+                        setTimeout(async () => {
+                            await signOut(auth);
+                            showLoginScreen();
+                        }, 3000);
                     }
-                });
-                showAppContent();
-                loadInventoryFromFirebase();
+                } else {
+                    // Si el documento del usuario ya existe en Firestore
+                    if (userDocSnap.data().status === 'approved' && user.emailVerified) {
+                        currentUserNameDisplay.textContent = userDocSnap.data().name || "Usuario";
+                        showAppContent();
+                        loadInventoryFromFirebase(); // Carga el inventario del usuario
+                    } else if (!user.emailVerified) {
+                        // Si el correo no está verificado
+                        showMessageModal("Tu correo electrónico no ha sido verificado. Por favor, revisa tu bandeja de entrada o spam. Redirigiendo al login...");
+                        setTimeout(async () => {
+                            await signOut(auth); // Cierra la sesión para forzar la verificación
+                            showLoginScreen();
+                        }, 3000);
+                    } else if (userDocSnap.data().status === 'pending') {
+                        // Si el correo está verificado pero el estado es 'pending', lo actualizamos a 'approved'
+                        if (user.emailVerified) {
+                            await updateDoc(inventoryRef, { status: 'approved' });
+                            showMessageModal("¡Cuenta aprobada automáticamente! Redirigiendo...");
+                            setTimeout(() => {
+                                currentUserNameDisplay.textContent = userDocSnap.data().name || "Usuario";
+                                showAppContent();
+                                loadInventoryFromFirebase();
+                            }, 1500);
+                        } else {
+                            showMessageModal("Tu cuenta está pendiente de aprobación. Redirigiendo al login...");
+                            setTimeout(async () => {
+                                await signOut(auth);
+                                showLoginScreen();
+                            }, 3000);
+                        }
+                    }
+                }
             } else {
                 // Usuario no logeado
                 currentUserUid = null;
                 inventoryRef = null;
+                if (unsubscribeSnapshot) {
+                    unsubscribeSnapshot(); // Desuscribirse si no hay usuario
+                }
                 showLoginScreen();
             }
         });
@@ -542,32 +427,41 @@
         let clothes = 0;
         let haircuts = 0;
 
-        // Función para cargar los datos desde Firestore
+        // Función para cargar los datos desde Firestore y escuchar cambios en tiempo real
         async function loadInventoryFromFirebase() {
             if (!currentUserUid || !inventoryRef) {
                 console.log("No hay usuario autenticado o referencia de inventario.");
                 return;
             }
 
-            try {
-                const docSnap = await getDoc(inventoryRef);
+            // Desuscribirse de cualquier listener anterior para evitar duplicados
+            if (unsubscribeSnapshot) {
+                unsubscribeSnapshot();
+            }
+
+            // Escuchar cambios en tiempo real en el documento del usuario
+            unsubscribeSnapshot = onSnapshot(inventoryRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     money = data.money || 0;
                     clothes = data.clothes || 0;
                     haircuts = data.haircuts || 0;
-                    console.log("Inventario cargado:", data);
+                    console.log("Inventario cargado/actualizado:", data);
+                    updateDisplay();
                 } else {
-                    // Crear un documento inicial si no existe para el usuario
-                    console.log("Documento de inventario no encontrado, creando uno nuevo.");
-                    await setDoc(inventoryRef, { money: 0, clothes: 0, haircuts: 0 });
-                    money = 0; clothes = 0; haircuts = 0; // Resetear valores si se crea nuevo
+                    console.log("Documento de inventario no encontrado para el usuario actual.");
+                    // Esto podría pasar si un admin elimina al usuario o si hay un error.
+                    // Podrías redirigir al login o mostrar un mensaje.
+                    showMessageModal("Tu inventario no pudo ser cargado. Por favor, inicia sesión de nuevo.");
+                    setTimeout(async () => {
+                        await signOut(auth);
+                        showLoginScreen();
+                    }, 2000);
                 }
-                updateDisplay();
-            } catch (error) {
-                console.error("Error al cargar el inventario: ", error);
-                showMessageModal("Error al cargar el inventario.");
-            }
+            }, (error) => {
+                console.error("Error al escuchar el inventario: ", error);
+                showMessageModal("Error al cargar el inventario en tiempo real.");
+            });
         }
 
         // Función para guardar los datos en Firestore
@@ -590,7 +484,7 @@
             }
         }
 
-        // Función para actualizar la visualización en la página 
+        // Función para actualizar la visualización en la página
         function updateDisplay() {
             document.getElementById('moneyAmount').textContent = money.toFixed(2);
             document.getElementById('clothesAmount').textContent = clothes;
@@ -598,7 +492,7 @@
         }
 
         // Modificamos addValue para usar las variables y luego guardar en Firebase
-        async function addValue(type) {
+        window.addValue = async function(type) { // Hacemos global
             let inputId = '';
             let value = 0;
 
@@ -625,12 +519,13 @@
             document.getElementById(inputId).value = ''; // Limpiar el input
             updateDisplay(); // Actualiza la UI inmediatamente
             await saveInventoryToFirebase(); // Guarda los cambios en Firebase
+            showMessageModal(`Se ha añadido ${value} a ${type}.`);
         }
 
         // --- Lógica de Temporizador ---
         const timers = {};
 
-        function startTimer(timerId, durationInSeconds) {
+        window.startTimer = function(timerId, durationInSeconds) { // Hacemos global
             if (timers[timerId]) {
                 clearInterval(timers[timerId]);
             }
@@ -655,18 +550,14 @@
         }
 
         // --- Lógica del Modal de Mensaje ---
-        function showMessageModal(message) {
+        window.showMessageModal = function(message) { // Hacemos global
             modalMessageText.textContent = message;
             modal.style.display = 'flex'; // Mostrar el modal
         }
 
-        function closeModal() {
+        window.closeModal = function() { // Hacemos global
             modal.style.display = 'none'; // Ocultar el modal
         }
-
-        // Asegurarse de que el observador de autenticación se inicie al cargar la página
-        // onAuthStateChanged ya maneja la lógica de mostrar pantallas al inicio.
     </script>
 </body>
 </html>
-

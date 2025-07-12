@@ -219,12 +219,10 @@
         const modal = document.getElementById('messageModal');
         const modalMessageText = document.getElementById('modalMessageText');
 
-        // Define el UID del administrador (¡IMPORTANTE: Reemplaza con el UID real de tu usuario admin!)
-        // Puedes obtener el UID de un usuario en la consola de Firebase Authentication.
-        const ADMIN_UID = "YOUR_ADMIN_UID_HERE"; // <--- PEGA AQUÍ EL UID REAL DE MIKAZUKI
+        // Se elimina la constante ADMIN_UID ya que la funcionalidad de administrador se está quitando.
 
         // Función para manejar el inicio de sesión con Correo/Contraseña
-        async function handleLogin() {
+        window.handleLogin = async function() { // Hacemos esta función globalmente accesible
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
@@ -237,23 +235,24 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // Cargar el rol del usuario desde Firestore para una verificación más robusta
+                // Cargar el documento del usuario desde Firestore para verificar su estado y email
                 const userDocRef = doc(db, "users_data", user.uid);
                 const userDocSnap = await getDoc(userDocRef);
 
-                if (userDocSnap.exists() && userDocSnap.data().role === 'admin') {
-                    showMessageModal("¡Inicio de sesión de administrador exitoso! Redirigiendo a la página de administración...");
-                    setTimeout(() => {
-                        window.location.href = '/admin.html';
-                    }, 1500);
-                } else if (userDocSnap.exists() && userDocSnap.data().status === 'approved') {
+                if (userDocSnap.exists() && userDocSnap.data().status === 'approved' && user.emailVerified) {
                     showMessageModal("¡Inicio de sesión exitoso! Redirigiendo...");
                     setTimeout(() => {
                         window.location.href = '/index.html';
                     }, 1500);
-                } else {
-                    // Si el usuario no está aprobado o el documento no existe, cerrar sesión y redirigir al login
-                    showMessageModal("Tu cuenta está pendiente de aprobación o no existe. Por favor, espera la aprobación del administrador.");
+                } else if (userDocSnap.exists() && !user.emailVerified) { // Si el correo no está verificado
+                    showMessageModal("Tu correo electrónico no ha sido verificado. Por favor, revisa tu bandeja de entrada o spam para verificar tu cuenta. Redirigiendo al login...");
+                    setTimeout(async () => {
+                        await signOut(auth); // Cierra la sesión para forzar la verificación
+                        window.location.href = '/login.html';
+                    }, 3000);
+                }
+                else { // Si el usuario no está aprobado o el documento no existe
+                    showMessageModal("Tu cuenta está pendiente de aprobación o no existe. Por favor, espera la aprobación de tu cuenta. Redirigiendo al login...");
                     setTimeout(async () => {
                         await signOut(auth);
                         window.location.href = '/login.html';
@@ -272,7 +271,7 @@
         }
 
         // Función para manejar el inicio de sesión con Google
-        async function handleGoogleLogin() {
+        window.handleGoogleLogin = async function() { // Hacemos esta función globalmente accesible
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
@@ -299,18 +298,20 @@
                     }, 2000);
                 } else {
                     // Si el usuario ya existe, verifica su rol y estado
-                    if (userDocSnap.data().role === 'admin') {
-                        showMessageModal("¡Inicio de sesión de administrador con Google exitoso! Redirigiendo a la página de administración...");
-                        setTimeout(() => {
-                            window.location.href = '/admin.html';
-                        }, 1500);
-                    } else if (userDocSnap.data().status === 'approved') {
+                    if (userDocSnap.data().status === 'approved' && user.emailVerified) { // Se añade verificación de email
                         showMessageModal("¡Inicio de sesión con Google exitoso! Redirigiendo...");
                         setTimeout(() => {
                             window.location.href = '/index.html';
                         }, 1500);
-                    } else {
-                        showMessageModal("Tu cuenta está pendiente de aprobación o no existe. Por favor, espera la aprobación del administrador.");
+                    } else if (!user.emailVerified) { // Si el correo no está verificado
+                        showMessageModal("Tu correo electrónico no ha sido verificado. Por favor, revisa tu bandeja de entrada o spam para verificar tu cuenta. Redirigiendo al login...");
+                        setTimeout(async () => {
+                            await signOut(auth);
+                            window.location.href = '/login.html';
+                        }, 3000);
+                    }
+                    else {
+                        showMessageModal("Tu cuenta está pendiente de aprobación o no existe. Por favor, espera la aprobación de tu cuenta.");
                         setTimeout(async () => {
                             await signOut(auth);
                             window.location.href = '/login.html';
@@ -330,12 +331,12 @@
         }
 
         // --- Lógica del Modal de Mensaje ---
-        function showMessageModal(message) {
+        window.showMessageModal = function(message) { // Hacemos esta función globalmente accesible
             modalMessageText.textContent = message;
             modal.style.display = 'flex'; // Mostrar el modal
         }
 
-        function closeModal() {
+        window.closeModal = function() { // Hacemos esta función globalmente accesible
             modal.style.display = 'none'; // Ocultar el modal
         }
     </script>

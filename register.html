@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Border Breaker</title>
-    
+    <title>Registrarse - Border Breaker</title>
     <style>
-        /* Estilos CSS - Estilo Mafia Rosado y Negro */
+        /* Estilos CSS - Estilo Mafia Rosado y Negro (consistente con la app principal) */
         body {
             font-family: 'Courier New', Courier, monospace;
             background-color: #0d0d0d;
             color: #f5f5f5;
             margin: 0;
             padding: 20px;
-            display: flex; /* Usar flexbox para centrar el contenido */
+            display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Asegura que ocupe al menos el alto de la ventana */
+            min-height: 100vh;
         }
-        
+
         .container {
-            max-width: 800px;
-            width: 100%; /* Asegura que ocupe todo el ancho disponible */
+            max-width: 400px; /* Más pequeño para login/register */
+            width: 100%;
             margin: 0 auto;
             background-color: #1a1a1a;
             padding: 30px;
@@ -29,45 +28,32 @@
             box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 20px;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
             color: #ff69b4;
             text-transform: uppercase;
-            font-size: 2.5em;
-            letter-spacing: 3px;
+            font-size: 2em;
+            letter-spacing: 2px;
             border-bottom: 2px solid #ff69b4;
             padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        /* Estilos para el Login y Registro */
-        #login-screen, #register-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            border: 1px solid #ff69b4;
-            border-radius: 5px;
-            background-color: #262626;
-            text-align: center;
-            gap: 15px;
-        }
-        
-        .login-input {
+        .login-input { /* Reutilizando la clase para consistencia */
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #ff69b4;
             background-color: #0d0d0d;
             color: #f5f5f5;
-            width: 80%;
+            width: calc(100% - 22px); /* Ancho completo menos padding y borde */
             max-width: 300px;
             border-radius: 4px;
         }
 
-        .login-button {
+        .login-button { /* Reutilizando la clase para consistencia */
             padding: 10px 20px;
             background-color: #ff69b4;
             color: #0d0d0d;
@@ -79,111 +65,28 @@
             margin-top: 15px;
             transition: background-color 0.3s ease;
         }
-        
+
         .login-button:hover {
             background-color: #f53199;
         }
 
-        #login-message, #register-message, #app-message {
-            color: #ff69b4;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        
-        /* Estilos de la aplicación principal (Inventario y Temporizadores) */
-        #app-content {
-            display: none; /* Oculto por defecto, se muestra al iniciar sesión */
-            flex-direction: column; /* Asegura que las secciones se apilen */
-            gap: 30px; /* Espacio entre secciones */
-        }
-        
-        .section {
-            padding: 20px;
-            border: 1px solid #ff69b4;
-            border-radius: 5px;
-            background-color: #262626;
-        }
-
-        .tracker-section h2, .timer-section h2, .input-section h2 {
-            margin-top: 0;
-            color: #ff69b4;
-            text-transform: uppercase;
-            border-bottom: 1px solid #ff69b4;
-            padding-bottom: 5px;
-        }
-
-        .input-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-            gap: 10px; /* Espacio entre elementos del input */
-        }
-
-        .input-item label {
-            flex: 1;
-            min-width: 100px; /* Asegura que la etiqueta tenga un ancho mínimo */
-            font-weight: bold;
+        p {
+            margin-top: 15px;
             color: #ccc;
         }
 
-        .input-item input {
-            flex: 2;
-            min-width: 150px; /* Asegura que el input tenga un ancho mínimo */
-            padding: 8px;
-            border: 1px solid #ff69b4;
-            background-color: #0d0d0d;
-            color: #f5f5f5;
-            border-radius: 4px;
-        }
-
-        .input-item button, .timer-button {
-            padding: 8px 15px;
-            background-color: #ff69b4;
-            color: #0d0d0d;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .input-item button:hover, .timer-button:hover {
-            background-color: #f53199;
-        }
-
-        .timer-display {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
+        a {
             color: #ff69b4;
-            text-shadow: 0 0 5px #ff69b4;
-        }
-        
-        .timer-group {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .timer-box {
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #ff69b4;
-            border-radius: 5px;
-            flex-grow: 1;
-            min-width: 180px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
         }
 
-        .timer-box h3 {
-            color: #ff69b4;
-            text-transform: uppercase;
+        a:hover {
+            color: #f53199;
         }
 
-        /* Estilos para el modal de mensaje */
+        /* Estilos para el modal de mensaje (consistente con la app principal) */
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
@@ -225,23 +128,23 @@
             cursor: pointer;
         }
 
+        #register-message {
+            color: #ff69b4;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
         /* Media Queries para responsividad */
         @media (max-width: 600px) {
             .container {
-                padding: 15px;
-                gap: 20px;
+                padding: 20px;
             }
 
             h1 {
-                font-size: 1.8em;
+                font-size: 1.5em;
             }
 
-            .input-item {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .input-item label, .input-item input, .input-item button {
+            .login-input {
                 width: 100%;
                 max-width: none;
             }
@@ -250,89 +153,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Border Breaker</h1>
-
-        <!-- Pantalla de Login -->
-        <div id="login-screen">
-            <h2>Inicio de Sesión</h2>
-            <input type="email" id="loginEmail" class="login-input" placeholder="Correo Electrónico">
-            <input type="password" id="loginPassword" class="login-input" placeholder="Contraseña">
-            <button class="login-button" onclick="handleLogin()">Acceder</button>
-            <p id="login-message"></p>
-            <!-- CAMBIO AQUÍ: Enlace a register.html -->
-            <p>¿No tienes cuenta? <a href="register.html" style="color: #ff69b4;">Regístrate aquí</a></p>
-        </div>
-
-        <!-- Pantalla de Registro (se mantiene oculta si se usa register.html) -->
-        <div id="register-screen" style="display: none;">
-            <h2>Registro de Usuario</h2>
-            <input type="text" id="registerName" class="login-input" placeholder="Nombre de Usuario">
-            <input type="email" id="registerEmail" class="login-input" placeholder="Correo Electrónico">
-            <input type="password" id="registerPassword" class="login-input" placeholder="Contraseña">
-            <button class="login-button" onclick="handleRegister()">Registrar</button>
-            <p id="register-message"></p>
-            <p>¿Ya tienes cuenta? <a href="#" onclick="showLoginScreen()" style="color: #ff69b4;">Inicia sesión aquí</a></p>
-        </div>
-
-        <!-- Contenido principal de la aplicación -->
-        <div id="app-content">
-            <div class="section tracker-section">
-                <h2>Inventario de <span id="currentUserName"></span></h2>
-                <p><strong>Dinero:</strong> $<span id="moneyAmount">0.00</span></p>
-                <p><strong>Ropa:</strong> <span id="clothesAmount">0</span> prendas</p>
-                <p><strong>Recortes de pelo:</strong> <span id="haircutsAmount">0</span></p>
-            </div>
-
-            <div class="section input-section">
-                <h2>Añadir</h2>
-                <div class="input-item">
-                    <label for="moneyInput">Dinero ($):</label>
-                    <input type="number" id="moneyInput" placeholder="Ingresar cantidad">
-                    <button onclick="addValue('money')">Añadir Dinero</button>
-                </div>
-
-                <div class="input-item">
-                    <label for="clothesInput">Ropa (prendas):</label>
-                    <input type="number" id="clothesInput" placeholder="Ingresar cantidad">
-                    <button onclick="addValue('clothes')">Añadir Ropa</button>
-                </div>
-
-                <div class="input-item">
-                    <label for="haircutsInput">Recortes:</label>
-                    <input type="number" id="haircutsInput" placeholder="Ingresar cantidad">
-                    <button onclick="addValue('haircuts')">Añadir Recortes</button>
-                </div>
-            </div>
-
-            <div class="section timer-section">
-                <h2>Operaciones</h2>
-                <div class="timer-group">
-                    <div class="timer-box">
-                        <h3>Robo Pequeño</h3>
-                        <p>10 minutos</p>
-                        <div id="timer-small" class="timer-display">10:00</div>
-                        <button class="timer-button" onclick="startTimer('small', 10 * 60)">Iniciar</button>
-                    </div>
-                    
-                    <div class="timer-box">
-                        <h3>Robo Mediano</h3>
-                        <p>15 minutos</p>
-                        <div id="timer-medium" class="timer-display">15:00</div>
-                        <button class="timer-button" onclick="startTimer('medium', 15 * 60)">Iniciar</button>
-                    </div>
-
-                    <div class="timer-box">
-                        <h3>Robo Grande</h3>
-                        <p>25 minutos</p>
-                        <div id="timer-large" class="timer-display">25:00</div>
-                        <button class="timer-button" onclick="startTimer('large', 25 * 60)">Iniciar</button>
-                    </div>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="login-button" onclick="logout()">Cerrar Sesión</button>
-            </div>
-        </div>
+        <h1>Registrarse</h1>
+        <input type="text" id="registerName" class="login-input" placeholder="Nombre de Usuario">
+        <input type="email" id="registerEmail" class="login-input" placeholder="Correo Electrónico">
+        <input type="password" id="registerPassword" class="login-input" placeholder="Contraseña">
+        <button class="login-button" onclick="handleRegister()">Registrar</button>
+        <p id="register-message"></p>
+        <p>¿Ya tienes cuenta? <a href="/login.html">Inicia sesión aquí</a></p>
     </div>
 
     <!-- Modal de Mensaje -->
@@ -345,12 +172,13 @@
 
     <script type="module">
         // Importa las funciones necesarias de los SDK de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"; // Versión actualizada
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"; // Importar Auth
-        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
         // Tu configuración de Firebase (¡IMPORTANTE: Reemplaza con tus propios valores!)
+        // Si estás ejecutando esto en un entorno Canvas que proporciona __firebase_config,
+        // deberías usar: const firebaseConfig = JSON.parse(__firebase_config);
         const firebaseConfig = {
             apiKey: "AIzaSyD-BWB4Xtv7BW0-EKvG48RROzgEn9kvSig",
             authDomain: "borderbreakersbb.firebaseapp.com",
@@ -363,58 +191,20 @@
 
         // Inicializa Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app); 
-        const auth = getAuth(app); // Inicializar Firebase Authentication
-        const db = getFirestore(app); // Inicializar Firebase Firestore
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Inicializa el proveedor de Google (aunque no se use directamente para el registro de email/password)
+        const googleProvider = new GoogleAuthProvider();
 
         // Referencias a elementos del DOM para mensajes
-        const loginMessageDisplay = document.getElementById('login-message');
         const registerMessageDisplay = document.getElementById('register-message');
-        const currentUserNameDisplay = document.getElementById('currentUserName');
         const modal = document.getElementById('messageModal');
         const modalMessageText = document.getElementById('modalMessageText');
 
-        let currentUserUid = null; // ID único del usuario autenticado por Firebase
-        let inventoryRef = null; // Referencia al documento de Firestore del usuario actual
-
-        // --- Funciones para mostrar/ocultar pantallas ---
-        function showLoginScreen() {
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('register-screen').style.display = 'none';
-            document.getElementById('app-content').style.display = 'none';
-            loginMessageDisplay.textContent = ''; // Limpiar mensajes
-            registerMessageDisplay.textContent = '';
-        }
-
-        // La función showRegisterScreen ya no es necesaria para mostrar una sección
-        // en la misma página, ya que ahora redirigiremos a register.html.
-        // Sin embargo, la mantengo si en algún punto decides volver a una SPA.
-        function showRegisterScreen() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'flex';
-            document.getElementById('app-content').style.display = 'none';
-            loginMessageDisplay.textContent = ''; // Limpiar mensajes
-            registerMessageDisplay.textContent = '';
-        }
-
-        function showAppContent() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'none';
-            document.getElementById('app-content').style.display = 'flex';
-            document.getElementById('app-content').style.flexDirection = 'column'; // Asegurar dirección de columna
-            // Limpiar campos de login/registro
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-            // Los campos de registro no necesitan limpiarse aquí si redirigimos a una nueva página
-            // document.getElementById('registerName').value = ''; 
-            // document.getElementById('registerEmail').value = '';
-            // document.getElementById('registerPassword').value = '';
-        }
-
-        // --- Lógica de Autenticación con Firebase ---
-
         // Función para manejar el REGISTRO de un nuevo usuario
-        async function handleRegister() {
+        // Hacemos esta función globalmente accesible
+        window.handleRegister = async function() {
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
@@ -429,22 +219,27 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                currentUserUid = user.uid; // Guarda el UID del usuario autenticado
-                currentUserNameDisplay.textContent = name; // Muestra el nombre en la app
+                // Envía el correo de verificación
+                await sendEmailVerification(user);
 
                 // Guarda la información adicional del usuario en Firestore
-                inventoryRef = doc(db, "users_data", user.uid); // Colección 'users_data' para perfiles
-                await setDoc(inventoryRef, {
+                // El estado inicial es 'pending' hasta que el correo sea verificado
+                const userDocRef = doc(db, "users_data", user.uid);
+                await setDoc(userDocRef, {
                     email: email,
-                    name: name, // Guardamos el nombre ingresado
+                    name: name,
                     money: 0,
                     clothes: 0,
-                    haircuts: 0
+                    haircuts: 0,
+                    role: 'user', // Rol por defecto
+                    status: 'pending' // Estado inicial, se cambiará a 'approved' al verificar el email
                 });
 
-                showMessageModal("¡Registro exitoso! Has iniciado sesión.");
-                showAppContent(); // Muestra el contenido de la aplicación
-                loadInventoryFromFirebase(); // Carga el inventario inicial
+                // Mensaje de registro actualizado para incluir la verificación de correo
+                showMessageModal("¡Ya estás registrado! Por favor, verifica tu correo electrónico para activar tu cuenta. Redirigiendo a la página de inicio de sesión...");
+                setTimeout(() => {
+                    window.location.href = '/login.html'; // Redirige a la página de login
+                }, 4000); // Dar más tiempo para leer el mensaje de verificación
             } catch (error) {
                 console.error("Error al registrar:", error.code, error.message);
                 let errorMessage = "Error al registrar. Inténtalo de nuevo.";
@@ -459,218 +254,15 @@
             }
         }
 
-        // Función para manejar el INICIO DE SESIÓN
-        async function handleLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                loginMessageDisplay.textContent = "Por favor, ingresa tu correo y contraseña.";
-                return;
-            }
-
-            try {
-                // Inicia sesión con Firebase Authentication
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                currentUserUid = user.uid; // Guarda el UID del usuario autenticado
-                
-                // Cargar el nombre del usuario desde Firestore
-                const userDoc = await getDoc(doc(db, "users_data", user.uid));
-                if (userDoc.exists()) {
-                    currentUserNameDisplay.textContent = userDoc.data().name || "Usuario";
-                } else {
-                    currentUserNameDisplay.textContent = "Usuario"; // Fallback si no hay nombre
-                }
-
-                showMessageModal("¡Inicio de sesión exitoso!");
-                showAppContent(); // Muestra el contenido de la aplicación
-                loadInventoryFromFirebase(); // Carga el inventario del usuario
-            } catch (error) {
-                console.error("Error al iniciar sesión:", error.code, error.message);
-                let errorMessage = "Error al iniciar sesión. Inténtalo de nuevo.";
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorMessage = "Correo o contraseña incorrectos.";
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = "El formato del correo electrónico es inválido.";
-                }
-                loginMessageDisplay.textContent = errorMessage;
-            }
-        }
-
-        // Función para CERRAR SESIÓN
-        async function logout() {
-            try {
-                await signOut(auth); // Cierra sesión en Firebase
-                showMessageModal("Sesión cerrada.");
-                showLoginScreen(); // Vuelve a la pantalla de login
-                // Limpiar datos locales
-                money = 0;
-                clothes = 0;
-                haircuts = 0;
-                updateDisplay();
-            } catch (error) {
-                console.error("Error al cerrar sesión:", error.message);
-                showMessageModal("Error al cerrar sesión.");
-            }
-        }
-
-        // Observador del estado de autenticación de Firebase
-        // Esto se ejecuta cada vez que el estado de autenticación cambia (login, logout, recarga)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Usuario logeado
-                currentUserUid = user.uid;
-                inventoryRef = doc(db, "users_data", user.uid); // La colección para los datos del inventario de cada usuario
-                // Cargar el nombre del usuario
-                getDoc(inventoryRef).then(docSnap => {
-                    if (docSnap.exists()) {
-                        currentUserNameDisplay.textContent = docSnap.data().name || "Usuario";
-                    } else {
-                        currentUserNameDisplay.textContent = "Usuario";
-                    }
-                });
-                showAppContent();
-                loadInventoryFromFirebase();
-            } else {
-                // Usuario no logeado
-                currentUserUid = null;
-                inventoryRef = null;
-                showLoginScreen();
-            }
-        });
-
-        // --- Lógica del Inventario con Firebase Firestore ---
-
-        let money = 0;
-        let clothes = 0;
-        let haircuts = 0;
-
-        // Función para cargar los datos desde Firestore
-        async function loadInventoryFromFirebase() {
-            if (!currentUserUid || !inventoryRef) {
-                console.log("No hay usuario autenticado o referencia de inventario.");
-                return;
-            }
-
-            try {
-                const docSnap = await getDoc(inventoryRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    money = data.money || 0;
-                    clothes = data.clothes || 0;
-                    haircuts = data.haircuts || 0;
-                    console.log("Inventario cargado:", data);
-                } else {
-                    // Crear un documento inicial si no existe para el usuario
-                    console.log("Documento de inventario no encontrado, creando uno nuevo.");
-                    await setDoc(inventoryRef, { money: 0, clothes: 0, haircuts: 0 });
-                    money = 0; clothes = 0; haircuts = 0; // Resetear valores si se crea nuevo
-                }
-                updateDisplay();
-            } catch (error) {
-                console.error("Error al cargar el inventario: ", error);
-                showMessageModal("Error al cargar el inventario.");
-            }
-        }
-
-        // Función para guardar los datos en Firestore
-        async function saveInventoryToFirebase() {
-            if (!currentUserUid || !inventoryRef) {
-                console.log("No hay usuario autenticado o referencia de inventario para guardar.");
-                return;
-            }
-
-            try {
-                await updateDoc(inventoryRef, {
-                    money: money,
-                    clothes: clothes,
-                    haircuts: haircuts
-                });
-                console.log("Inventario guardado en Firestore.");
-            } catch (error) {
-                console.error("Error al guardar el inventario: ", error);
-                showMessageModal("Error al guardar el inventario.");
-            }
-        }
-
-        // Función para actualizar la visualización en la página 
-        function updateDisplay() {
-            document.getElementById('moneyAmount').textContent = money.toFixed(2);
-            document.getElementById('clothesAmount').textContent = clothes;
-            document.getElementById('haircutsAmount').textContent = haircuts;
-        }
-
-        // Modificamos addValue para usar las variables y luego guardar en Firebase
-        async function addValue(type) {
-            let inputId = '';
-            let value = 0;
-
-            if (type === 'money') {
-                inputId = 'moneyInput';
-                value = parseFloat(document.getElementById(inputId).value);
-                if (!isNaN(value)) {
-                    money += value;
-                }
-            } else if (type === 'clothes') {
-                inputId = 'clothesInput';
-                value = parseInt(document.getElementById(inputId).value);
-                if (!isNaN(value)) {
-                    clothes += value;
-                }
-            } else if (type === 'haircuts') {
-                inputId = 'haircutsInput';
-                value = parseInt(document.getElementById(inputId).value);
-                if (!isNaN(value)) {
-                    haircuts += value;
-                }
-            }
-
-            document.getElementById(inputId).value = ''; // Limpiar el input
-            updateDisplay(); // Actualiza la UI inmediatamente
-            await saveInventoryToFirebase(); // Guarda los cambios en Firebase
-        }
-
-        // --- Lógica de Temporizador ---
-        const timers = {};
-
-        function startTimer(timerId, durationInSeconds) {
-            if (timers[timerId]) {
-                clearInterval(timers[timerId]);
-            }
-
-            let timeLeft = durationInSeconds;
-            const display = document.getElementById(`timer-${timerId}`);
-
-            timers[timerId] = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                display.textContent = formattedTime;
-
-                if (timeLeft <= 0) {
-                    clearInterval(timers[timerId]);
-                    display.textContent = "¡Operación completada!";
-                    showMessageModal(`¡La operación de ${timerId} ha terminado!`); // Usar modal
-                }
-
-                timeLeft--;
-            }, 1000);
-        }
-
         // --- Lógica del Modal de Mensaje ---
-        function showMessageModal(message) {
+        window.showMessageModal = function(message) {
             modalMessageText.textContent = message;
             modal.style.display = 'flex'; // Mostrar el modal
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             modal.style.display = 'none'; // Ocultar el modal
         }
-
-        // Asegurarse de que el observador de autenticación se inicie al cargar la página
-        // onAuthStateChanged ya maneja la lógica de mostrar pantallas al inicio.
     </script>
 </body>
 </html>
